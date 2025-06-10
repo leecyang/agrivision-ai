@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8081
+  max-http-header-size: 16KB # Increase max header size
+
+# 自定义配置
+app:
+  upload:
+    path: e:\yangyangli\pest_recognize_system\uploads
+  model:
+    type: djl  # 可选值: djl, python, tflite
+    path: ${user.dir}/model/bestmodel.onnx
+    python:
+      executable: python
+      script: ${user.dir}/scripts/predict.py
