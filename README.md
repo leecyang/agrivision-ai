@@ -59,7 +59,7 @@
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/yourrepo/pest-recognition.git
+git clone https://github.com/leecyang/pest-recognition-system.git
 
 # 2. 后端启动
 cd pest-recognition-backend
@@ -129,8 +129,8 @@ gitGraph
 
 ## 🌟 贡献者
 
-<a href="https://github.com/yourrepo/pest-recognition/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=yourrepo/pest-recognition" />
+<a href="https://github.com/leecyang/pest-recognition-system/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=leecyang/pest-recognition-system" />
 </a>
 
 ## 📞 联系我们
