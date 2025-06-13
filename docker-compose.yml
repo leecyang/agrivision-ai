@@ -1,0 +1,169 @@
+version: '3.8'
+
+services:
+  # MySQL数据库服务
+  mysql:
+    image: mysql:8.0
+    container_name: pest-recognition-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root123}
+      MYSQL_DATABASE: ${DB_NAME:-pest_recognition}
+      MYSQL_USER: ${DB_USERNAME:-pestuser}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-pestpass123}
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./pest.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./pest_ifo.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+    networks:
+      - pest-network
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # 后端Spring Boot服务
+  backend:
+    build:
+      context: ./pest-recognition-backend
+      dockerfile: Dockerfile
+    container_name: pest-recognition-backend
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${DB_NAME:-pest_recognition}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-pestuser}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-pestpass123}
+      FILE_UPLOAD_PATH: /app/uploads
+    ports:
+      - "8080:8080"
+    volumes:
+      - backend_uploads:/app/uploads
+      - backend_logs:/app/logs
+      - ./models:/app/models:ro
+    networks:
+      - pest-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # 前端Vue.js服务
+  frontend:
+    build:
+      context: ./pest-recognition-frontend
+      dockerfile: Dockerfile
+      args:
+        VUE_APP_API_BASE_URL: http://localhost:8080/api
+    container_name: pest-recognition-frontend
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    networks:
+      - pest-network
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx反向代理（可选）
+  nginx:
+    image: nginx:alpine
+    container_name: pest-recognition-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - backend_uploads:/var/www/uploads:ro
+    networks:
+      - pest-network
+    depends_on:
+      - frontend
+      - backend
+    profiles:
+      - production
+
+  # Redis缓存（可选）
+  redis:
+    image: redis:7-alpine
+    container_name: pest-recognition-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - pest-network
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis123}
+    profiles:
+      - cache
+
+  # 监控服务（可选）
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: pest-recognition-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - pest-network
+    profiles:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: pest-recognition-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin123}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - pest-network
+    depends_on:
+      - prometheus
+    profiles:
+      - monitoring
+
+volumes:
+  mysql_data:
+    driver: local
+  backend_uploads:
+    driver: local
+  backend_logs:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  pest-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
