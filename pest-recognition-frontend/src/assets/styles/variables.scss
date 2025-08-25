@@ -1,0 +1,64 @@
+// 主题颜色
+$primary-color: #42b983; // 主色调（绿色）
+$secondary-color: #35495e; // 次要色调（深蓝灰色）
+$accent-color: #ff7e67; // 强调色（橙红色）
+$success-color: #67c23a; // 成功色
+$warning-color: #e6a23c; // 警告色
+$danger-color: #f56c6c; // 危险色
+$info-color: #909399; // 信息色
+
+// 文字颜色
+$text-primary: #303133; // 主要文字
+$text-regular: #606266; // 常规文字
+$text-secondary: #909399; // 次要文字
+$text-placeholder: #c0c4cc; // 占位文字
+
+// 边框颜色
+$border-color-base: #dcdfe6; // 一级边框
+$border-color-light: #e4e7ed; // 二级边框
+$border-color-lighter: #ebeef5; // 三级边框
+$border-color-extra-light: #f2f6fc; // 四级边框
+
+// 背景颜色
+$background-color-base: #f5f7fa; // 基础背景色
+$background-color-light: #fafafa; // 浅色背景
+
+// 字体
+$font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+$font-size-extra-large: 20px;
+$font-size-large: 18px;
+$font-size-medium: 16px;
+$font-size-base: 14px;
+$font-size-small: 13px;
+$font-size-extra-small: 12px;
+
+// 圆角
+$border-radius-base: 4px;
+$border-radius-small: 2px;
+$border-radius-large: 8px;
+$border-radius-circle: 50%;
+
+// 阴影
+$box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+$box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+$box-shadow-dark: 0 2px 16px 0 rgba(0, 0, 0, 0.2);
+
+// 间距
+$spacing-mini: 4px;
+$spacing-small: 8px;
+$spacing-base: 16px;
+$spacing-large: 24px;
+$spacing-extra-large: 32px;
+
+// 过渡
+$transition-duration: 0.3s;
+$transition-duration-fast: 0.2s;
+$transition-duration-slow: 0.4s;
+$transition-timing-function: ease-in-out;
+
+// 响应式断点
+$breakpoint-xs: 576px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1600px;

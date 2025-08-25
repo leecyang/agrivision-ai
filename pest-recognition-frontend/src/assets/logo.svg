@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 背景圆形 -->
+  <circle cx="100" cy="100" r="90" fill="#409EFF" opacity="0.1"/>
+  
+  <!-- 昆虫身体 -->
+  <ellipse cx="100" cy="100" rx="40" ry="50" fill="#409EFF"/>
+  
+  <!-- 昆虫头部 -->
+  <circle cx="100" cy="60" r="25" fill="#409EFF"/>
+  
+  <!-- 昆虫眼睛 -->
+  <circle cx="90" cy="55" r="5" fill="white"/>
+  <circle cx="110" cy="55" r="5" fill="white"/>
+  
+  <!-- 昆虫触角 -->
+  <path d="M85 45 Q70 25 65 10" stroke="#409EFF" stroke-width="3" fill="none"/>
+  <path d="M115 45 Q130 25 135 10" stroke="#409EFF" stroke-width="3" fill="none"/>
+  
+  <!-- 昆虫腿 -->
+  <path d="M70 90 Q50 100 30 95" stroke="#409EFF" stroke-width="3" fill="none"/>
+  <path d="M70 110 Q40 120 25 130" stroke="#409EFF" stroke-width="3" fill="none"/>
+  <path d="M70 130 Q50 150 40 170" stroke="#409EFF" stroke-width="3" fill="none"/>
+  
+  <path d="M130 90 Q150 100 170 95" stroke="#409EFF" stroke-width="3" fill="none"/>
+  <path d="M130 110 Q160 120 175 130" stroke="#409EFF" stroke-width="3" fill="none"/>
+  <path d="M130 130 Q150 150 160 170" stroke="#409EFF" stroke-width="3" fill="none"/>
+  
+  <!-- 放大镜 -->
+  <circle cx="150" cy="150" r="25" fill="none" stroke="#409EFF" stroke-width="4"/>
+  <line x1="170" y1="170" x2="185" y2="185" stroke="#409EFF" stroke-width="4"/>
+</svg>
